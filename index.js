@@ -4,30 +4,22 @@ const http = require('http'),
   hostname = '127.0.0.1';
 
 const server = http.createServer((request, response) => {
+  const handleReadFile = (statusCode, location) => {
+    fileSystem.readFile(location, (error, data) => {
+      response.writeHead(statusCode, { 'content-type': 'text/html' });
+      response.write(data);
+      response.end();
+    });
+  };
+
   if (request.url === '/') {
-    fileSystem.readFile('./view/home.html', (error, data) => {
-      response.writeHead(200, { 'content-type': 'text/html' });
-      response.write(data);
-      response.end();
-    });
+    handleReadFile(200, './view/home.html');
   } else if (request.url === '/about') {
-    fileSystem.readFile('./view/about.html', (error, data) => {
-      response.writeHead(200, { 'content-type': 'text/html' });
-      response.write(data);
-      response.end();
-    });
+    handleReadFile(200, './view/about.html');
   } else if (request.url === '/contact') {
-    fileSystem.readFile('./view/contact.html', (error, data) => {
-      response.writeHead(200, { 'content-type': 'text/html' });
-      response.write(data);
-      response.end();
-    });
+    handleReadFile(200, './view/contact.html');
   } else {
-    fileSystem.readFile('./view/error.html', (error, data) => {
-      response.writeHead(404, { 'content-type': 'text/html' });
-      response.write(data);
-      response.end();
-    });
+    handleReadFile(404, './view/error.html');
   }
 });
 
